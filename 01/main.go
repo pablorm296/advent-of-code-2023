@@ -75,6 +75,11 @@ func partOne(lines []string) int {
 		// Get the digits in the line
 		digitsInLine := re.FindAllString(lines[i], -1)
 
+		// If there are no digits, skip the line
+		if len(digitsInLine) == 0 {
+			continue
+		}
+
 		// Get the first and last digit
 		firstDigit := digitsInLine[0]
 		lastDigit := digitsInLine[len(digitsInLine)-1]
