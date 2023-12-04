@@ -1,0 +1,2 @@
+# Ignore files prefixed with an underscore (used for build output)
+_*
