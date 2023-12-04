@@ -21,6 +21,11 @@ func main() {
 	// Print the result of part one
 	log.Println("Part one result:", partOneResult)
 
+	// Get the result of part two
+	partTwoResult := PartTwo(lines)
+
+	// Print the result of part two
+	log.Println("Part two result:", partTwoResult)
 }
 
 func readLines(path string) []string {
@@ -98,7 +103,116 @@ func partOne(lines []string) int {
 		digits = append(digits, newDigitAsInt)
 
 		// For each line, print the line and the new digit
-		log.Println("Line:", lines[i], "New digit:", newDigit)
+		log.Println("Line ", i+1, ":", lines[i], "New digit:", newDigit)
+	}
+
+	// Sum the digits
+	var sum int64
+
+	for i := 0; i < len(digits); i++ {
+		sum += digits[i]
+	}
+
+	return int(sum)
+}
+
+func PartTwo(lines []string) int {
+	// Define an array of digits spelled out
+	var spelledOutDigits = []string{
+		"zero", "one", "two", "three", "four",
+		"five", "six", "seven", "eight", "nine",
+	}
+
+	// Define a map of spelled out digits
+	var spelledOutDigitsMap = map[string]string{
+		"zero":  "0",
+		"one":   "1",
+		"two":   "2",
+		"three": "3",
+		"four":  "4",
+		"five":  "5",
+		"six":   "6",
+		"seven": "7",
+		"eight": "8",
+		"nine":  "9",
+	}
+
+	// Init a variable, to contain the digits
+	var digits []int64
+
+	// For each line
+	for i := 0; i < len(lines); i++ {
+		// Init a variable, to contain the digitsInLine in the line
+		var digitsInLine []string
+
+		// Convert the line to a slice of runes
+		lineAsRunes := []rune(lines[i])
+
+		// Loop through the runes
+		for j := 0; j < len(lineAsRunes); j++ {
+			// Get the current rune
+			currentRune := lineAsRunes[j]
+
+			// If the rune is a number between 1 and 9,
+			// convert it to an integer and append it to the digits
+			if currentRune > '0' && currentRune <= '9' {
+				digitsInLine = append(digitsInLine, string(currentRune))
+				continue
+			}
+
+			// If the rune is not a number, loop through the digits
+			for k := 0; k < len(spelledOutDigits); k++ {
+				// Get the current digit
+				currentDigit := spelledOutDigits[k]
+
+				// If the current rune is the first letter of the current digit
+				if currentRune == rune(currentDigit[0]) {
+					// Get the length of the current digit
+					currentDigitLength := len(currentDigit)
+
+					// Check that the next letters of the current digit are in the line
+					if (j + currentDigitLength) <= len(lineAsRunes) {
+						// Get the content of the line, from the current rune to the end of the current digit
+						content := string(lineAsRunes[j : j+currentDigitLength])
+
+						// If the content is the current digit
+						if content == currentDigit {
+							// get the digit from the map
+							digit := spelledOutDigitsMap[currentDigit]
+
+							// Append the digit to the digitsInLine
+							digitsInLine = append(digitsInLine, digit)
+						}
+					}
+				}
+			}
+		}
+
+		// If there are no digits in the line, skip the line
+		if len(digitsInLine) == 0 {
+			continue
+		}
+
+		// Get the first and last digit
+		firstDigit := digitsInLine[0]
+		lastDigit := digitsInLine[len(digitsInLine)-1]
+
+		// Combine the digits
+		newDigit := firstDigit + lastDigit
+
+		// Convert the new digit to an integer
+		newDigitAsInt, err := strconv.ParseInt(newDigit, 10, 64)
+
+		// Check for errors
+		if err != nil {
+			log.Panic("Error converting string to integer:", err)
+		}
+
+		// Append the new digit to the digits
+		digits = append(digits, newDigitAsInt)
+
+		// For each line, print the line and the new digit
+		log.Println("Line ", i+1, ":", lines[i], "New digit:", newDigit)
 	}
 
 	// Sum the digits
