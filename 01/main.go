@@ -1,11 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"log"
 	"os"
 	"regexp"
 	"strconv"
+
+	"github.com/pablorm296/advent-of-code-2023/utils"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 	inputFile := os.Args[1]
 
 	// Read the lines of the file
-	lines := readLines(inputFile)
+	lines := utils.ReadLines(inputFile)
 
 	// Get the result of part one
 	partOneResult := partOne(lines)
@@ -26,42 +27,6 @@ func main() {
 
 	// Print the result of part two
 	log.Println("Part two result:", partTwoResult)
-}
-
-func readLines(path string) []string {
-	log.Println("Reading file:", path)
-
-	// Open the file
-	file, err := os.Open(path)
-
-	if err != nil {
-		log.Panic("Error opening file:", err)
-	}
-
-	defer file.Close()
-
-	// Read the file line by line
-	scanner := bufio.NewScanner(file)
-
-	// Init a lines variable
-	var lines []string
-
-	// Loop through the lines
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	// Check for errors
-	err = scanner.Err()
-
-	if err != nil {
-		log.Panic("Error reading file:", err)
-	}
-
-	// Print the number of lines
-	log.Println("Number of lines:", len(lines))
-
-	return lines
 }
 
 func partOne(lines []string) int {
